@@ -11,7 +11,7 @@ gender = ""
 family_size = 0
 
 if profile in ["Single Person", "Student", "International Student"]:
-    gender = st.radio("Select Gender", ["Boy, "Girl"])
+    gender = st.radio("Select Gender", ["Boy", "Girl"])
 else:
     family_size = st.slider("How many people are in your family?", 2, 8, 4)
 
