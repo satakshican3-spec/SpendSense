@@ -83,7 +83,7 @@ else:
 st.write("---")
 c1, c2, c3 = st.columns(3)
 c1.metric("Total Expenses", f"${total_expenses}")
-c2.metric("Monthly Savings", f"${savings}")
+c2.metric("Monthly Savings", f"${monthly_savings}")
 c3.metric("Yearly Projection", f"${savings * 12}")
 
 if savings < 0:
