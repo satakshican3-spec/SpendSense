@@ -59,6 +59,27 @@ savings = income - total_expenses
 st.write("---")
 st.subheader("Monthly Financial Summary")
 
+st.write("---")
+st.subheader("Financial Goals")
+goal_name = st.text_input("What are you saving for?", value="Emergency Fund")
+goal_target = st.number_input("Target Amount (CAD)", min_value=1, value=5000)
+current_saved = st.number_input("Amount Already Saved (CAD)", min_value=0, value=500)
+
+if goal_target > 0:
+    progress = min(current_saved / goal_target, 1.0)
+    st.progress(progress)
+    st.write(f"Goal Progress: {progress*100:.1f}%")
+
+if monthly_savings > 0:
+    months_needed = (goal_target - current_saved) / monthly_savings
+    if months_needed > 0:
+        st.info(f"At your current savings rate, you will reach your goal in {months_needed:.1f} months.")
+    else:
+        st.success("Congratulations! You have reached your goal.")
+else:
+    st.warning("Your current budget has no surplus. Reduce expenses to start saving for your goal.")
+
+st.write("---")
 c1, c2, c3 = st.columns(3)
 c1.metric("Total Expenses", f"${total_expenses}")
 c2.metric("Monthly Savings", f"${savings}")
