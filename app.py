@@ -71,8 +71,9 @@ if goal_target > 0:
     st.write(f"Goal Progress: {progress*100:.1f}%")
 
 if monthly_savings > 0:
-    months_needed = (goal_target - current_saved) / monthly_savings
-    if months_needed > 0:
+    remaining_amount = goal_target - current_saved 
+    if remaining_amount> 0:
+        months_needed = remaining_amount / monthly_savings
         st.info(f"At your current savings rate, you will reach your goal in {months_needed:.1f} months.")
     else:
         st.success("Congratulations! You have reached your goal.")
