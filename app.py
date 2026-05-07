@@ -40,7 +40,7 @@ with col1:
     insurance = st.number_input("Insurance (Health/Auto/Tenant)", value=default_ins)
 
 with col2:
-    transport = st.number_input('Transportation", value=150)
+    transport = st.number_input("Transportation", value=150)
     household = st.number_input("Household Items/Misc", value=150)
 
     extra_costs = 0
