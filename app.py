@@ -86,7 +86,7 @@ c1.metric("Total Expenses", f"${total_expenses}")
 c2.metric("Monthly Savings", f"${monthly_savings}")
 c3.metric("Yearly Projection", f"${monthly_savings * 12}")
 
-if savings < 0:
+if monthly_savings < 0:
     st.error("Warning: Your expenses are higher than your income.")
 else:
     st.success(f"Great! As a {profile} ({gender if gender else family_size}), you have a healthy savings rate.")
