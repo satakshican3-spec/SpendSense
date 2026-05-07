@@ -84,7 +84,7 @@ st.write("---")
 c1, c2, c3 = st.columns(3)
 c1.metric("Total Expenses", f"${total_expenses}")
 c2.metric("Monthly Savings", f"${monthly_savings}")
-c3.metric("Yearly Projection", f"${savings * 12}")
+c3.metric("Yearly Projection", f"${monthly_savings * 12}")
 
 if savings < 0:
     st.error("Warning: Your expenses are higher than your income.")
