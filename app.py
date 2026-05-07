@@ -54,7 +54,7 @@ with col2:
         extra_costs = childcare
 
 total_expenses = rent + groceries + insurance + transport + household + extra_costs
-savings = income - total_expenses
+monthly_savings = income - total_expenses
 
 st.write("---")
 st.subheader("Monthly Financial Summary")
