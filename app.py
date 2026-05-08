@@ -1,22 +1,21 @@
 import streamlit as st
 import random
-
-if page == "Dashboard":
-    st.title("Student Dashboard")
-
-    finance_quotes = [
-        "A penny saved is a penny earned.",
-        "Beware of little expenses; a small leak will sink a great ship.",
-        "Do not save what is left after spending; spend what is left after saving.",
-        "Investment in knowledge pays the best interest."
-    ]
-    st.write(f"*\"{random.choice(finance_quotes)}\"*")
-    st.write("---")
+import pandas as pd
     
 st.set_page_config(page_title="Spendsense Budgeter", layout="wide")
 
 st.title("Spendsense: Global Budget Simulator")
 st.write("Calculate your 2026 living costs and savings potential in Canada.")
+
+finance_quotes = [
+    "A penny saved is a penny earned.",
+    "Do not save what is left after spending; spend what if left after saving.",
+    "Investment in knowledge pays the best interest.",
+    "Beware of little expenses; a small leak will sink a great ship.",
+    "Grit and discipline are the foundations of financial freedom."
+]
+st.write(f"*\"{random.choice(finance_quotes)}\"*")
+st.write("---")
 
 profile = st.selectbox("Select your life situation", ["Single Person", "Student", "International Student", "Family"])
 
