@@ -1,104 +1,62 @@
 import streamlit as st
-import random
 import pandas as pd
+import plotly.express as px
+import random
+
+st.set_page_config(page_title="SpendSense: 2026 Finance Lab", Layout="wide")
+
+def get_financial_quote():
+    quotes = [
+        "Do not save what is left after spending, but spend what is left after saving.",
+        "Beware of little expenses; a small leak will sink a great ship.",
+        "An investment in knowledge pays the best interest.",
+        "Compound interest is the eighth wonder of the world.",
+        "Financial freedom is available to those who learn about it and work for it."
+    ]
+    return random.choice(quotes)
+
+st.sidebar.title("Budget Architect")
+income = st.sidebar.number_input("Monthly Net Income ($)", value=3500, step=100)
+
+st.sidebar.write("---")
+st.sidebar.subheader("Fixed Expenses")
+rent = st.sidebar.slider("Housing/Rent", 1000, 3000, 1500)
+utilities = st.sidebar.slider("Utilities", 50, 500, 200)
+food = st.sidebar.slider("Groceries", 200, 1000, 500)
+transport = st.sidebar.slider("Transport/Fuel", 0, 800, 300)
+
+st.sidebar.write("---")
+inflation_rate = st.sidebar.select_slider("2026 Inflation Forecast (%)", options=[0, 2, 5, 8, 10, 15], value=5)
+
+total_expenses = (rent + utilities + food + transport) * (1 + inflation_rate/100)
+savings = income - total_expenses
+
+st.title("SpendSense: Financial Simulation Lab")
+st.markdown(f"*{get_financial_quote()}*")
+st.write("---")
+
+m1, m2, m3 = st.columns(3)
+m1.metric("Total Expenses", f"${total_expenses:,.2f}", delta=f"{inflation_rate}% Inflation", delta_color="inverse")
+m2.metric("Monthly Savings", f"${savings:,.2f}")
+m3.metric("Savings Rate", f"{(savings/income)*100:.1f}%")
+
+st.write("---")
+
+col_left, col_right = st.columns(2)
+
+with col_left:
+    st.subheader("Expense Distribution")
+    df_pie = pd.DataFrame({
+        "Category": ["Housing", "Utilities", "Groceries", "Transport"],
+        "Amount": [rent, utilities, food, transport]
+    })
+    fig = px.pie(df_pie, values='Amount', names='Category', hole=0.4,
+                 color_discrete_sequence=px.colors.sequential.RdBu)
+    st.plotly_chart(fig, use_container_width=True)
+
+with col_right:
+    st.subheader("Investment 'What-If' (5 Year Growth)")
+    rate = st.slider("Estimated Return Rate (%)", 1, 12, 7)
+    future_value = savings *(((1 + (rate/100/12))**(12*5) - 1) / (rate/100/12))
+    st.info(f"If you invest your **${savings:,.0f}** savings at **{rate}%**, in 5 years you'll have:")
     
-st.set_page_config(page_title="Spendsense Budgeter", layout="wide")
-
-st.title("Spendsense: Global Budget Simulator")
-st.write("Calculate your 2026 living costs and savings potential in Canada.")
-
-finance_quotes = [
-    "A penny saved is a penny earned.",
-    "Do not save what is left after spending; spend what if left after saving.",
-    "Investment in knowledge pays the best interest.",
-    "Beware of little expenses; a small leak will sink a great ship.",
-    "Grit and discipline are the foundations of financial freedom."
-]
-st.write(f"*\"{random.choice(finance_quotes)}\"*")
-st.write("---")
-
-profile = st.selectbox("Select your life situation", ["Single Person", "Student", "International Student", "Family"])
-
-gender = ""
-family_size = 0
-
-if profile in ["Single Person", "Student", "International Student"]:
-    gender = st.radio("Select Gender", ["Boy", "Girl"])
-else:
-    family_size = st.slider("How many people are in your family?", 2, 8, 4)
-
-income = st.number_input("Total Monthly Income (CAD)", min_value=0, value=4000)
-
-st.write("---")
-
-if profile == "Family":
-    default_rent = 2500 + (family_size * 250)
-    default_food = family_size * 350
-    default_ins = 300 + (family_size *50)
-elif profile == "International Student":
-    default_rent = 1200
-    default_food = 500
-    default_ins = 100
-else:
-    default_rent = 1800
-    default_food = 600
-    default_ins = 150
-
-col1, col2 = st.columns(2)
-
-with col1:
-    rent = st.number_input("Housing and Utilities", value=default_rent)
-    groceries = st.number_input("Groceries and Essentials", value=default_food)
-    insurance = st.number_input("Insurance (Health/Auto/Tenant)", value=default_ins)
-
-with col2:
-    transport = st.number_input("Transportation", value=150)
-    household = st.number_input("Household Items/Misc", value=150)
-
-    extra_costs = 0
-    if profile == "International Student":
-        st.info("Requirement: $22,895/year proof of funds needed.")
-        tuition = st.number_input("Monthly Tuition Portion", value=2500)
-        extra_costs = tuition
-    elif profile == "Family":
-        st.info(f"Budgeting for a family of {family_size}.")
-        childcare = st.number_input("Childcare/Education Fees", value=500 * (family_size // 3))
-        extra_costs = childcare
-
-total_expenses = rent + groceries + insurance + transport + household + extra_costs
-monthly_savings = income - total_expenses
-
-st.write("---")
-st.subheader("Monthly Financial Summary")
-
-st.write("---")
-st.subheader("Financial Goals")
-goal_name = st.text_input("What are you saving for?", value="Emergency Fund")
-goal_target = st.number_input("Target Amount (CAD)", min_value=1, value=5000)
-current_saved = st.number_input("Amount Already Saved (CAD)", min_value=0, value=500)
-
-if goal_target > 0:
-    progress = min(current_saved / goal_target, 1.0)
-    st.progress(progress)
-    st.write(f"Goal Progress: {progress*100:.1f}%")
-
-if monthly_savings > 0:
-    remaining_amount = goal_target - current_saved 
-    if remaining_amount> 0:
-        months_needed = remaining_amount / monthly_savings
-        st.info(f"At your current savings rate, you will reach your goal in {months_needed:.1f} months.")
-    else:
-        st.success("Congratulations! You have reached your goal.")
-else:
-    st.warning("Your current budget has no surplus. Reduce expenses to start saving for your goal.")
-
-st.write("---")
-c1, c2, c3 = st.columns(3)
-c1.metric("Total Expenses", f"${total_expenses}")
-c2.metric("Monthly Savings", f"${monthly_savings}")
-c3.metric("Yearly Projection", f"${monthly_savings * 12}")
-
-if monthly_savings < 0:
-    st.error("Warning: Your expenses are higher than your income.")
-else:
-    st.success(f"Great! As a {profile} ({gender if gender else family_size}), you have a healthy savings rate.")
