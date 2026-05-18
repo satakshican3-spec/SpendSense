@@ -59,4 +59,7 @@ with col_right:
     rate = st.slider("Estimated Return Rate (%)", 1, 12, 7)
     future_value = savings *(((1 + (rate/100/12))**(12*5) - 1) / (rate/100/12))
     st.info(f"If you invest your **${savings:,.0f}** savings at **{rate}%**, in 5 years you'll have:")
-    
+    st.title(f"${future_value:,.2f}")
+
+st.write("---")
+st.caption("SpendSense v1.3 | Calgary Economic Asset | No Data Tracking")
