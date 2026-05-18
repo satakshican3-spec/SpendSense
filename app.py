@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import random
 
-st.set_page_config(page_title="SpendSense: 2026 Finance Lab", Layout="wide")
+st.set_page_config(page_title="SpendSense: 2026 Finance Lab", layout="wide")
 
 def get_financial_quote():
     quotes = [
